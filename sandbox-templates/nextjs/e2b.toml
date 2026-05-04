@@ -1,0 +1,17 @@
+# This is a config for E2B sandbox template.
+# You can use template ID (butaa3d2o7mhwdl1ne1p) or template name (flowai-nextjs-001) to create a sandbox:
+
+# Python SDK
+# from e2b import Sandbox, AsyncSandbox
+# sandbox = Sandbox.create("flowai-nextjs-001") # Sync sandbox
+# sandbox = await AsyncSandbox.create("flowai-nextjs-001") # Async sandbox
+
+# JS SDK
+# import { Sandbox } from 'e2b'
+# const sandbox = await Sandbox.create('flowai-nextjs-001')
+
+team_id = "7f041f5e-68db-471f-86c1-e5bcc4158fa0"
+start_cmd = "/compile_page.sh"
+dockerfile = "e2b.Dockerfile"
+template_name = "flowai-nextjs-001"
+template_id = "butaa3d2o7mhwdl1ne1p"
