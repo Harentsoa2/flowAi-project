@@ -1,88 +1,70 @@
 # flowAi
 
-AI-powered development platform that lets you create web applications by chatting with AI agents in real-time sandboxes.
+flowAi is an AI-powered web app builder. Users describe what they want to create, and the platform turns that request into a generated Next.js application inside an isolated E2B sandbox. Each project keeps its conversation history, generated files, live preview URL, and usage status.
+
+The goal of flowAi is to provide a focused workspace for quickly creating and iterating on small web apps, prototypes, dashboards, landing pages, and interactive tools through natural language.
 
 ## Features
 
-- 🤖 AI-powered code generation with AI agents
-- 💻 Real-time Next.js application development in E2B sandboxes
-- 🔄 Live preview & code preview with split-pane interface
-- 📁 File explorer with syntax highlighting and code theme
-- 💬 Conversational project development with message history
-- 🎯 Smart usage tracking and rate limiting
-- 💳 Subscription management with pro features
-- 🔐 Authentication with Clerk
-- ⚙️ Background job processing with Inngest
-- 🗃️ Project management and persistence
+- AI-assisted project creation from a plain text prompt
+- AI-generated project names using OpenAI
+- Conversational iteration on existing projects
+- Background code generation with Inngest
+- Isolated Next.js sandboxes powered by E2B
+- Live preview of generated apps
+- Generated file explorer with syntax highlighting
+- Split workspace with chat, preview, and code views
+- Project persistence with Prisma and PostgreSQL
+- Authentication with Clerk
+- Usage tracking and credit limits
+- Pricing page integration through Clerk billing components
+- Responsive UI built with Tailwind CSS and Shadcn/Radix primitives
 
 ## Tech Stack
 
-- Next.js 15
+- Next.js 15 App Router
 - React 19
 - TypeScript
 - Tailwind CSS v4
-- Shadcn/ui
+- Shadcn UI and Radix UI
 - tRPC
+- TanStack Query
 - Prisma ORM
 - PostgreSQL
-- OpenAI, Anthropic or Grok
-- E2B Code Interpreter
-- Clerk Authentication
-- Inngest
-- Prisma
-- Radix UI
-- Lucide React
+- Clerk authentication and billing UI
+- Inngest background jobs
+- Inngest Agent Kit
+- OpenAI models
+- E2B Code Interpreter sandboxes
+- Lucide React icons
 
-## Building E2B Template (REQUIRED)
+## How It Works
 
-Before running the application, you must build the E2B template that the AI agents use to create sandboxes.
+1. A user submits a prompt describing the app they want to build.
+2. flowAi generates a short project name with OpenAI.
+3. The project and first user message are saved in PostgreSQL.
+4. An Inngest event starts the background code-generation workflow.
+5. The workflow creates or connects to an E2B sandbox.
+6. The coding agent writes and updates files inside the sandbox.
+7. The sandbox runs a Next.js development server on port `3000`.
+8. flowAi saves the generated files, preview URL, and assistant response.
+9. The user can preview the app, inspect files, and continue iterating by sending more messages.
 
-**Prerequisites:**
-- Docker must be installed and running (the template build command uses Docker CLI)
+## Prerequisites
 
-```bash
-# Install E2B CLI
-npm i -g @e2b/cli
-# or
-brew install e2b
+Before running the project, install or configure:
 
-# Login to E2B
-e2b auth login
-
-# Navigate to the sandbox template directory
-cd sandbox-templates/nextjs
-
-# Build the template (replace 'your-template-name' with your desired name)
-e2b template build --name your-template-name --cmd "/compile_page.sh"
-```
-
-After building the template, update the template name in `src/inngest/functions.ts`:
-
-```typescript
-// Replace "flowAi-nextjs-test-2" with your template name
-const sandbox = await Sandbox.create("your-template-name");
-```
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp env.example .env
-# Fill in your API keys and database URL
-
-# Set up database
-npx prisma migrate dev # Enter name "init" for migration
-
-# Start development server
-npm run dev
-```
+- Node.js 20 or newer
+- npm
+- PostgreSQL database
+- OpenAI API key
+- Clerk application
+- E2B account and API key
+- Docker, required for building the E2B template
 
 ## Environment Variables
 
-Create a `.env` file with the following variables:
+Create a `.env` file at the project root. You can start from `env.example`.
 
 ```bash
 DATABASE_URL=""
@@ -93,6 +75,7 @@ OPENAI_API_KEY=""
 
 # E2B
 E2B_API_KEY=""
+E2B_TEMPLATE_NAME="flowai-nextjs-001"
 
 # Clerk
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
@@ -103,41 +86,170 @@ NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/"
 NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/"
 ```
 
-## Additional Commands
+## Installation
+
+Install dependencies:
 
 ```bash
-# Database
-npm run postinstall        # Generate Prisma client
-npx prisma studio          # Open database studio
-npx prisma migrate dev     # Migrate schema changes
-npx prisma migrate reset   # Reset database (Only for development)
+npm install
+```
 
-# Build
-npm run build          # Build for production
-npm run start          # Start production server
-npm run lint           # Run ESLint
+Generate the Prisma client:
+
+```bash
+npm run postinstall
+```
+
+Run database migrations:
+
+```bash
+npx prisma migrate dev
+```
+
+## Build The E2B Template
+
+The AI agent writes files inside an E2B sandbox. That sandbox is based on the template in `sandbox-templates/nextjs`.
+
+Install and authenticate the E2B CLI:
+
+```bash
+npm i -g @e2b/cli
+e2b auth login
+```
+
+Build the template:
+
+```bash
+cd sandbox-templates/nextjs
+e2b template build --name flowai-nextjs-001 --cmd "/compile_page.sh"
+```
+
+Make sure the template name matches your environment variable:
+
+```bash
+E2B_TEMPLATE_NAME="flowai-nextjs-001"
+```
+
+If you choose a different template name, update `E2B_TEMPLATE_NAME` in `.env`.
+
+## Run Locally
+
+Start the Next.js development server:
+
+```bash
+npm run dev
+```
+
+In a second terminal, start the Inngest dev server:
+
+```bash
+npm run inngest:dev
+```
+
+Open the app:
+
+```bash
+http://localhost:3000
+```
+
+## Useful Scripts
+
+```bash
+npm run dev          # Start the local Next.js app
+npm run build        # Build the production app
+npm run start        # Start the production server
+npm run lint         # Run ESLint
+npm run inngest:dev  # Start the local Inngest dev server
+npm run postinstall  # Generate the Prisma client
+```
+
+## Database Commands
+
+```bash
+npx prisma migrate dev     # Create and apply a local migration
+npx prisma studio          # Open Prisma Studio
+npx prisma generate        # Regenerate Prisma client
+npx prisma migrate reset   # Reset the database in development
 ```
 
 ## Project Structure
 
-- `src/app/` - Next.js app router pages and layouts
-- `src/components/` - Reusable UI components and file explorer
-- `src/modules/` - Feature-specific modules (projects, messages, usage)
-- `src/inngest/` - Background job functions and AI agent logic
-- `src/lib/` - Utilities and database client
-- `src/trpc/` - tRPC router and client setup
-- `prisma/` - Database schema and migrations
-- `sandbox-templates/` - E2B sandbox configuration
+```text
+src/app/                 Next.js routes and layouts
+src/components/          Shared UI components
+src/components/ui/       Shadcn/Radix UI primitives
+src/inngest/             Inngest client, functions, sandbox helpers
+src/lib/                 Database, usage, project-name, utilities
+src/modules/home/        Home page UI and prompt templates
+src/modules/messages/    Message API procedures
+src/modules/projects/    Project API procedures and workspace UI
+src/modules/usage/       Usage API procedures
+src/trpc/                tRPC server and client setup
+prisma/                  Prisma schema and migrations
+public/                  Static assets
+sandbox-templates/       E2B sandbox template files
+```
 
-## How It Works
+## Important Files
 
-1. **Project Creation**: Users create projects and describe what they want to build
-2. **AI Processing**: Messages are sent to GPT-4 agents via Inngest background jobs
-3. **Code Generation**: AI agents use E2B sandboxes to generate and test Next.js applications
-4. **Real-time Updates**: Generated code and previews are displayed in split-pane interface
-5. **File Management**: Users can browse generated files with syntax highlighting
-6. **Iteration**: Conversational development allows for refinements and additions
+- `src/prompt.ts` contains the system prompts used by the coding agent and response generators.
+- `src/inngest/functions.ts` contains the main background generation workflow.
+- `src/inngest/utils.ts` contains sandbox connection, server readiness, and output parsing helpers.
+- `src/lib/project-name.ts` generates project names with OpenAI.
+- `src/modules/home/constants.ts` contains the predefined prompt suggestions shown on the home page.
+- `sandbox-templates/nextjs/compile_page.sh` starts the Next.js server inside generated sandboxes.
 
----
+## AI Generation Notes
 
-Created by [CodeWithAntonio](https://codewithantonio.com)
+The generated app runs inside an isolated sandbox, not directly inside this repository. The agent is instructed to:
+
+- Write only relative sandbox paths such as `app/page.tsx`
+- Use Tailwind CSS for styling
+- Avoid nested interactive elements such as `button > button`
+- Avoid plain white or gray-only designs unless requested
+- Keep generated apps functional, responsive, and accessible
+- Avoid starting or restarting the dev server from inside the agent
+
+## Troubleshooting
+
+### Inngest events are not running
+
+Make sure both servers are running:
+
+```bash
+npm run dev
+npm run inngest:dev
+```
+
+Also confirm that `NEXT_PUBLIC_APP_URL` points to your local app URL.
+
+### E2B preview shows a closed port error
+
+Check that:
+
+- `E2B_API_KEY` is set
+- `E2B_TEMPLATE_NAME` matches a built E2B template
+- The template was built after changes to `compile_page.sh`
+- The sandbox template starts Next.js on `0.0.0.0:3000`
+
+### Project creation fails when generating a name
+
+Check that `OPENAI_API_KEY` is set and valid. Project names are generated with OpenAI before the project is saved.
+
+### Prisma client errors
+
+Regenerate the Prisma client:
+
+```bash
+npx prisma generate
+```
+
+Then rerun migrations if needed:
+
+```bash
+npx prisma migrate dev
+```
+
+## License
+
+This project is private by default. Add a license file if you plan to publish or distribute it.
