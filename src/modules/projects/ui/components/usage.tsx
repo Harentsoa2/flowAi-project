@@ -31,7 +31,7 @@ export const Usage = ({ points, msBeforeNext }: Props) => {
   }, [msBeforeNext]);
 
   return (
-    <div className="rounded-t-xl bg-background border border-b-0 p-2.5">
+    <div className="rounded-t-lg border border-b-0 border-primary/20 bg-card/90 p-2.5">
       <div className="flex items-center gap-x-2">
         <div>
           <p className="text-sm">

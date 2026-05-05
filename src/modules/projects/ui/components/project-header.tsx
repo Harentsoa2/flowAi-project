@@ -37,15 +37,15 @@ export const ProjectHeader = ({ projectId }: Props) => {
   const { setTheme, theme } = useTheme();
 
   return (
-    <header className="p-2 flex justify-between items-center border-b">
+    <header className="flex items-center justify-between border-b bg-card/90 p-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="sm"
-            className="focus-visible:ring-0 hover:bg-transparent hover:opacity-75 transition-opacity pl-2!"
+            className="pl-2! transition-colors hover:bg-accent focus-visible:ring-0"
           >
-            <Image src="/logo.svg" alt="Vibe" width={18} height={18} />
+            <Image src="/logo.svg" alt="flowAi" width={18} height={18} />
             <span className="text-sm font-medium">{project.name}</span>
             <ChevronDownIcon />
           </Button>
@@ -55,7 +55,7 @@ export const ProjectHeader = ({ projectId }: Props) => {
             <Link href="/">
               <ChevronLeftIcon />
               <span>
-                Go to Dashboard
+                Dashboard
               </span>
             </Link>
           </DropdownMenuItem>

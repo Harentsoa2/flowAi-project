@@ -17,4 +17,4 @@ ping_server() {
 }
 
 ping_server &
-cd /home/user && exec npx next dev --turbopack
+cd /home/user && exec npx next dev --turbopack --hostname 0.0.0.0 --port 3000

@@ -73,7 +73,7 @@ const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) => {
     return (
       <SidebarMenuButton
         isActive={isSelected}
-        className="data-[active=true]:bg-transparent"
+        className="data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
         onClick={() => onSelect?.(currentPath)}
       >
         <FileIcon />

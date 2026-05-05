@@ -15,14 +15,14 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "p-4 bg-transparent fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b border-transparent",
-        isScrolled && "bg-background border-border"
+        "fixed top-0 left-0 right-0 z-50 border-b border-transparent bg-background/80 px-4 py-3 backdrop-blur-xl transition-all duration-200",
+        isScrolled && "border-border shadow-xs"
       )}
     >
       <div className="max-w-5xl mx-auto w-full flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="Vibe" width={24} height={24} />
-          <span className="font-semibold text-lg">Vibe</span>
+        <Link href="/" className="flex items-center gap-2.5">
+          <Image src="/logo.svg" alt="flowAi" width={28} height={28} />
+          <span className="text-lg font-semibold tracking-tight">flowAi</span>
         </Link>
         <SignedOut>
           <div className="flex gap-2">

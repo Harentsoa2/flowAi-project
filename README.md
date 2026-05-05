@@ -1,4 +1,4 @@
-# Vibe
+# flowAi
 
 AI-powered development platform that lets you create web applications by chatting with AI agents in real-time sandboxes.
 
@@ -59,7 +59,7 @@ e2b template build --name your-template-name --cmd "/compile_page.sh"
 After building the template, update the template name in `src/inngest/functions.ts`:
 
 ```typescript
-// Replace "vibe-nextjs-test-2" with your template name
+// Replace "flowAi-nextjs-test-2" with your template name
 const sandbox = await Sandbox.create("your-template-name");
 ```
 

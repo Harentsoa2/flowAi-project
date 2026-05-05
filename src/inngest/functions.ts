@@ -7,7 +7,7 @@ import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "@/prompt";
 
 import { inngest } from "./client";
 import { SANDBOX_TIMEOUT } from "./types";
-import { getSandbox, lastAssistantTextMessageContent, parseAgentOutput } from "./utils";
+import { ensureSandboxServer, getSandbox, lastAssistantTextMessageContent, parseAgentOutput } from "./utils";
 
 interface AgentState {
   summary: string;
@@ -57,10 +57,24 @@ const fixCommonGeneratedSyntaxIssues = (filePath: string, content: string) => {
     return content;
   }
 
-  return content
+  const fixedContent = content
     .replace(/\b(from\s*)`([^`\r\n]+)`/g, '$1"$2"')
     .replace(/(^|\n)(\s*import\s*)`([^`\r\n]+)`(\s*;?)/g, '$1$2"$3"$4')
     .replace(/\b(import\s*\(\s*)`([^`\r\n]+)`(\s*\))/g, '$1"$2"$3');
+
+  if (filePath !== "app/page.tsx") {
+    return fixedContent;
+  }
+
+  return fixedContent
+    .replace(
+      /\bexport\s+default\s+async\s+function\s+Home\s*\(/g,
+      "export default async function FlowAiPage(",
+    )
+    .replace(
+      /\bexport\s+default\s+function\s+Home\s*\(/g,
+      "export default function FlowAiPage(",
+    );
 };
 
 const FALLBACK_UI_COMPONENTS = {
@@ -186,6 +200,7 @@ export const codeAgentFunction = inngest.createFunction(
         process.env.E2B_TEMPLATE_NAME ?? "flowai-nextjs-001",
       );
       await sandbox.setTimeout(SANDBOX_TIMEOUT);
+      await ensureSandboxServer(sandbox);
       return sandbox.sandboxId;
     });
 
@@ -410,6 +425,7 @@ export const codeAgentFunction = inngest.createFunction(
 
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandboxId);
+      await ensureSandboxServer(sandbox);
       const host = sandbox.getHost(3000);
       return `https://${host}`;
     });

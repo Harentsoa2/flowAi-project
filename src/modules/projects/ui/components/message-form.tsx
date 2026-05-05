@@ -81,8 +81,8 @@ export const MessageForm = ({ projectId }: Props) => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className={cn(
-          "relative border p-4 pt-1 rounded-xl bg-sidebar dark:bg-sidebar transition-all",
-          isFocused && "shadow-xs",
+          "relative rounded-lg border border-primary/20 bg-card p-4 pt-1 shadow-sm transition-all",
+          isFocused && "border-primary/55 shadow-md shadow-primary/10",
           showUsage && "rounded-t-none",
         )}
       >
@@ -97,8 +97,8 @@ export const MessageForm = ({ projectId }: Props) => {
               onBlur={() => setIsFocused(false)}
               minRows={2}
               maxRows={8}
-              className="pt-4 resize-none border-none w-full outline-none bg-transparent"
-              placeholder="What would you like to build?"
+              className="w-full resize-none border-none bg-transparent pt-4 text-base outline-none placeholder:text-muted-foreground"
+              placeholder="Ask flowAi for the next change..."
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault();
@@ -118,8 +118,8 @@ export const MessageForm = ({ projectId }: Props) => {
           <Button
             disabled={isButtonDisabled}
             className={cn(
-              "size-8 rounded-full",
-              isButtonDisabled && "bg-muted-foreground border"
+              "size-9 rounded-md",
+              isButtonDisabled && "border bg-muted-foreground text-background"
             )}
           >
             {isPending ? (

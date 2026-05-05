@@ -131,18 +131,18 @@ export const FileExplorer = ({
 
   return (
     <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel defaultSize={30} minSize={30} className="bg-sidebar">
+      <ResizablePanel defaultSize={30} minSize={30} className="border-r bg-sidebar/90">
         <TreeView
           data={treeData}
           value={selectedFile}
           onSelect={handleFileSelect}
         />
       </ResizablePanel>
-      <ResizableHandle className="hover:bg-primary transition-colors" />
+      <ResizableHandle className="bg-border hover:bg-primary transition-colors" />
       <ResizablePanel defaultSize={70} minSize={50}>
         {selectedFile && files[selectedFile] ? (
           <div className="h-full w-full flex flex-col">
-            <div className="border-b bg-sidebar px-4 py-2 flex justify-between items-center gap-x-2">
+            <div className="flex items-center justify-between gap-x-2 border-b bg-card/90 px-4 py-2">
               <FileBreadcrumb filePath={selectedFile} />
               <Hint text="Copy to clipboard" side="bottom">
                 <Button

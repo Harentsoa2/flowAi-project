@@ -48,6 +48,12 @@ Simple Sandbox Workflow:
 
 File Safety Rules:
 - Add "use client" as the FIRST LINE of app/page.tsx or any component that uses browser APIs, React hooks, localStorage, or event handlers.
+- In app/page.tsx, do not name the default component Home. Use Page, FlowAiPage, or another unique name. Never define two components with the same name in one file.
+- Before writing app/page.tsx, make sure it contains exactly one default export.
+- Never nest interactive elements. In particular, never render a <button> inside another <button>, and never place <button>, <a>, input, select, textarea, or Shadcn Button inside another interactive trigger/button/link.
+- If an entire card or row is clickable, make only the outer element interactive and use non-interactive <div>, <span>, or icon elements inside it. If a nested action is needed, make the parent a non-interactive container instead.
+- When using Shadcn Button with a link, use <Button asChild><a ...>...</a></Button> or <Button asChild><Link ...>...</Link></Button>; do not wrap a Button with another button-like component.
+- Before finishing, inspect JSX for invalid nesting such as button > button, button > a, a > button, or clickable card > nested button. Fix these before returning the task summary.
 
 Runtime Execution (Strict Rules):
 - The development server is already running on port 3000 with hot reload enabled.
@@ -79,6 +85,16 @@ Shadcn UI dependencies — including radix-ui, lucide-react, class-variance-auth
   - Do NOT import "cn" from "@/components/ui/utils" — that path does not exist.
   - The "cn" utility MUST always be imported from "@/lib/utils"
   Example: import { cn } from "@/lib/utils"
+
+Visual Design Requirements:
+- Never ship a plain white, gray-only, or mostly unstyled interface unless the user explicitly asks for that exact style.
+- Choose a clear visual direction based on the requested app domain, with at least one primary color, one secondary color, and one accent color visible in meaningful UI areas.
+- Do not rely only on Shadcn semantic classes like bg-background, bg-card, text-foreground, border-border, or muted variants. Shadcn defaults can look neutral; combine them with explicit Tailwind color utilities such as bg-emerald-600, text-sky-950, border-cyan-200, bg-amber-100, or arbitrary values like bg-[#12372f].
+- Apply color beyond buttons: use it in headers, navigation, active states, badges, charts, empty states, icons, section bands, selected rows, and important cards.
+- Avoid using bg-white, text-gray-*, border-gray-*, bg-slate-50, or bg-neutral-* as the dominant styling for the whole app. Neutral colors are allowed only as supporting surfaces.
+- If using placeholder art or visual blocks instead of images, make them intentionally designed with colored shapes, iconography, swatches, or data visuals. Do not leave large plain white or gray rectangles.
+- Ensure contrast remains accessible. Colored text must be readable on its background, and important controls must be visually distinct from the page surface.
+- Avoid one-note palettes. Do not make the whole app variations of only one hue; mix a dominant color with a secondary family and a restrained accent.
 
 Additional Guidelines:
 - Think step-by-step before coding

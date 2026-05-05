@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { generateSlug } from "random-word-slugs";
 
 import { prisma } from "@/lib/db";
 import { TRPCError } from "@trpc/server";
 import { inngest } from "@/inngest/client";
 import { consumeCredits } from "@/lib/usage";
+import { generateProjectName } from "@/lib/project-name";
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
 
 export const projectsRouter = createTRPCRouter({
@@ -61,12 +61,22 @@ export const projectsRouter = createTRPCRouter({
         }
       }
 
+      let projectName: string;
+
+      try {
+        projectName = await generateProjectName(input.value);
+      } catch (error) {
+        console.error("Failed to generate project name", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to generate project name",
+        });
+      }
+
       const createdProject = await prisma.project.create({
         data: {
           userId: ctx.auth.userId,
-          name: generateSlug(2, {
-            format: "kebab",
-          }),
+          name: projectName,
           messages: {
             create: {
               content: input.value,
