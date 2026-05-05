@@ -1,5 +1,5 @@
 # This is a config for E2B sandbox template.
-# You can use template ID (butaa3d2o7mhwdl1ne1p) or template name (flowai-nextjs-001) to create a sandbox:
+# You can use template ID (3smgq4qgeofsggydliv1) or template name (flowai-nextjs-001) to create a sandbox:
 
 # Python SDK
 # from e2b import Sandbox, AsyncSandbox
@@ -14,4 +14,4 @@ team_id = "7f041f5e-68db-471f-86c1-e5bcc4158fa0"
 start_cmd = "/compile_page.sh"
 dockerfile = "e2b.Dockerfile"
 template_name = "flowai-nextjs-001"
-template_id = "butaa3d2o7mhwdl1ne1p"
+template_id = "3smgq4qgeofsggydliv1"
