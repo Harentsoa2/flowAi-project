@@ -6,7 +6,7 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return ( 
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-background">
+    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-background">
       <Navbar />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-48 bg-accent/35 dark:bg-accent/20" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 border-t bg-card/60" />

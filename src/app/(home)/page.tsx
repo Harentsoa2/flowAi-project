@@ -1,12 +1,16 @@
 import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
 
 import { ProjectForm } from "@/modules/home/ui/components/project-form";
 import { ProjectsList } from "@/modules/home/ui/components/projects-list";
+import { SignedOutLanding } from "@/modules/home/ui/components/signed-out-landing";
 
-const Page = () => {
+const Page = async () => {
+  const { userId } = await auth();
+
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col">
-      <section className="space-y-7 py-20 md:py-28 2xl:py-36">
+    <div className="mx-auto flex w-full max-w-6xl flex-col">
+      <section className="mx-auto w-full max-w-5xl space-y-7 py-16 md:py-24 2xl:py-28">
         <div className="flex items-center justify-center gap-3">
           <Image
             src="/logo.svg"
@@ -29,7 +33,13 @@ const Page = () => {
           <ProjectForm />
         </div>
       </section>
-      <ProjectsList />
+      {userId ? (
+        <div className="mx-auto w-full max-w-5xl">
+          <ProjectsList />
+        </div>
+      ) : (
+        <SignedOutLanding />
+      )}
     </div>
   );
 };
